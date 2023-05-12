@@ -1,0 +1,82 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Associations API
+  description: API for retrieving associations information 
+
+paths:
+  /api/v1/associations:
+    x-router-controller: associationsController
+    get:
+      description: Returns all associations
+      operationId: getAssociations
+      responses:
+        200:
+          description: Association list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/association'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /api/v1/associations/{registration_date}:
+    x-router-controller: associationsController
+    get:
+      description: Returns a single association by its registration_date
+      operationId: findByregistration_date
+      parameters:
+        - required: true
+          name: registration_date
+          description: registration_date of the association to fetch
+          in: path
+          schema:
+            type: number
+      responses:
+        200:
+          description: Association found by registration_date
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/association'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+components:
+  schemas:
+    association:
+        type: object
+        required:
+          - registration_date
+        properties:
+          name:
+            type: string
+          goal:
+            type: string
+          registration_date:
+            type: number
+          creation_date:
+            type: number
+          zip_code:
+            type: number
+          province:
+            type: string
+          township_code:
+            type: number
+    error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+      additionalProperties: true
